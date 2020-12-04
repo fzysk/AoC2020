@@ -2,6 +2,6 @@
 {
     internal sealed class PasspordIdAttribute : RegexAttribute
     {
-        public PasspordIdAttribute() : base("[0-9]{9}") { }
+        public PasspordIdAttribute() : base("^[0-9]{9}$") { }
     }
 }
