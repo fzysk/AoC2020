@@ -10,9 +10,12 @@ namespace Day4
         static void Main(string[] args)
         {
             string[] input = File.ReadAllLines("input.txt");
-            int validPassports = SplitData(input).Select(data => PassportParser.Parse(data)).Count(passport => passport.IsPassportValid());
+            var passports = SplitData(input).Select(data => PassportParser.Parse(data)).Where(passport => passport.IsPassportValid());
 
-            Console.WriteLine(validPassports);
+            foreach (var pass in passports)
+            {
+                Console.WriteLine(pass);
+            }
         }
 
         static IEnumerable<IEnumerable<string>> SplitData(string[] input)

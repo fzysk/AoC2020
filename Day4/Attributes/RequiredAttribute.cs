@@ -3,8 +3,11 @@
 namespace Day4.Attributes
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
-    sealed class RequiredAttribute : Attribute
+    internal sealed class RequiredAttribute : Attribute, IValiditationAttribute
     {
-       
+        public bool IsValid(string value)
+        {
+            return !string.IsNullOrEmpty(value);
+        }
     }
 }
