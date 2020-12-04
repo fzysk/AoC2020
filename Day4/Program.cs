@@ -13,9 +13,9 @@ namespace Day4
             List<Passport> passports = SplitData(input).Select(data => PassportParser.Parse(data))
                 .Where(passport => passport.IsPassportValid()).ToList();
 
-            foreach (var pass in passports)
+            foreach (var passport in passports)
             {
-                Console.WriteLine(pass);
+                Console.WriteLine(passport);
             }
             Console.WriteLine();
 
