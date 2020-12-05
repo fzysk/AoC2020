@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -17,9 +18,21 @@ namespace Day5
         {
             string[] input = File.ReadAllLines("input.txt");
 
-            int maxId = input.Select(line => LineToBoardingPass(line)).Max(pass => pass.GetSeatID());
+            List<BoardingPass> passes = input.Select(line => LineToBoardingPass(line)).OrderBy(pass => pass.GetSeatID()).ToList();
 
-            Console.WriteLine(maxId);
+            // PART 1 - Get max (spoiler, it's 832)
+            Console.WriteLine(passes[passes.Count - 1].GetSeatID());
+
+            // PART 2 - Get our seat id
+            for (int i = 1; i < passes.Count; i++)
+            {
+                if (passes[i].GetSeatID() - passes[i - 1].GetSeatID() > 1)
+                {
+                    Console.WriteLine($"Our seat id is somewhere in between {passes[i - 1].GetSeatID()} " +
+                        $"and {passes[i].GetSeatID()}");
+                    return;
+                }
+            }
         }
 
         static BoardingPass LineToBoardingPass(string line)
