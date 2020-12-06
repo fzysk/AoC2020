@@ -11,7 +11,7 @@ namespace Day6
         {
             string[] input = File.ReadAllLines("input.txt");
 
-            int yesCount = 0;
+            int yesCount = 0, everyoneYes = 0;
             foreach (IEnumerable<string> answerGroup in GetGroupedAnswers(input))
             {
                 var answerDict = new Dictionary<char, int>();
@@ -21,15 +21,26 @@ namespace Day6
                     {
                         if (!answerDict.ContainsKey(answer))
                         {
-                            answerDict.Add(answer, 0);
+                            answerDict.Add(answer, 1);
+                        }
+                        else
+                        {
+                            answerDict[answer] += 1;
                         }
                     }
                 }
 
                 yesCount += answerDict.Keys.Count;
+
+                int groupsCount = answerGroup.Count();
+                everyoneYes += answerDict.Count(answer => answer.Value == groupsCount);
             }
 
+            // PART 1 - Anyone answered yes;
             Console.WriteLine(yesCount);
+
+            // PART 2 - Everyone answered yes;
+            Console.WriteLine(everyoneYes);
         }
 
         private static IEnumerable<IEnumerable<string>> GetGroupedAnswers(string[] input)
