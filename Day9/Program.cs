@@ -19,7 +19,13 @@ namespace Day9
 
                 if (!IsSumTwoFromArray(preamble, numbers[PREAMBLE_SIZE + i]))
                 {
-                    Console.WriteLine(numbers[PREAMBLE_SIZE + i]);
+                    long faultyNumber = numbers[PREAMBLE_SIZE + i];
+                    Console.WriteLine(faultyNumber); // PART 1 number
+
+                    long[] range = FindRangeSummingtoNumber(numbers, faultyNumber);
+                    Array.Sort(range);
+
+                    Console.WriteLine(range[0] + range[range.Length - 1]);
                     return;
                 }
             }
@@ -39,6 +45,32 @@ namespace Day9
             }
 
             return false;
+        }
+
+        private static long[] FindRangeSummingtoNumber(long[] numbers, long faultyNumber)
+        {
+            for (int i = 0; i < numbers.Length - 1; i++)
+            {
+                int j = i + 1;
+                while (true)
+                {
+                    long[] range = numbers.Skip(i).Take(j - i + 1).ToArray();
+                    long sum = range.Sum();
+
+                    if (sum == faultyNumber)
+                    {
+                        return range;
+                    }
+                    else if (sum > faultyNumber)
+                    {
+                        break;
+                    }
+
+                    j++;
+                }
+            }
+
+            throw new Exception("Range not found");
         }
     }
 }
