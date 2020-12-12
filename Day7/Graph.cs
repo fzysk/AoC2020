@@ -8,7 +8,7 @@ namespace Day7
     {
         public List<Vertex> Vertices { get; set; } = new List<Vertex>();
 
-        public int HowManyColorBagsContain(string vertexName)
+        public int HowManyColorBagsHave(string vertexName)
         {
             bool[] visited = new bool[Vertices.Count];
             DFS(Vertices.FindIndex(v => v.Name == vertexName), visited);
@@ -16,19 +16,31 @@ namespace Day7
             return visited.Count(v => v) - 1;
         }
 
-        private void DFS(int vertexIndex, bool[] visited)
+        private int DFS(int vertexIndex, bool[] visited = null, int? previousBags = null)
         {
-            visited[vertexIndex] = true;
+            if (visited != null)
+            {
+                visited[vertexIndex] = true;
+            }
 
+            int sum = 0;
             foreach (Edge edge in Vertices[vertexIndex].Edges)
             {
                 int toIndex = Vertices.FindIndex(e => e.Name == edge.To.Name);
 
-                if (!visited[toIndex])
+                if (visited == null || !visited[toIndex])
                 {
-                    DFS(toIndex, visited);
+                    sum += DFS(toIndex, visited, edge.Value * (previousBags ?? 1));
                 }
-            }   
+            }
+
+            return sum + (previousBags ?? 0);
+        }
+
+        public int HowManyIndividualBagsContain(string vertexName)
+        {
+            // I should've write BFS, but here it is, DFS without visited array
+            return DFS(Vertices.FindIndex(v => v.Name == vertexName));
         }
     }
 }

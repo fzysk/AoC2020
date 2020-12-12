@@ -11,12 +11,17 @@ namespace Day7
         static void Main(string[] args)
         {
             string[] data = File.ReadAllLines("input.txt");
-            Graph graph = CreateGraph(data);
 
-            Console.WriteLine(graph.HowManyColorBagsContain("shiny gold"));
+            // PART 1
+            Graph graph1 = CreateGraph(data, reversedEdges: true);
+            Console.WriteLine(graph1.HowManyColorBagsHave("shiny gold"));
+
+            // PART 2
+            Graph graph2 = CreateGraph(data);
+            Console.WriteLine(graph2.HowManyIndividualBagsContain("shiny gold"));
         }
 
-        static Graph CreateGraph(string[] data)
+        static Graph CreateGraph(string[] data, bool reversedEdges = false)
         {
             Graph graph = new Graph();
             Regex regex = new Regex(@"(\d+ )?(\w+ \w+) bags?");
@@ -38,11 +43,22 @@ namespace Day7
                         Vertex subV = GetOrCreateVertex(graph, name);
                         int bags = int.Parse(match.Groups[1].Value);
 
-                        subV.Edges.Add(new Edge()
+                        if (reversedEdges)
                         {
-                            To = v,
-                            Value = bags
-                        });
+                            subV.Edges.Add(new Edge()
+                            {
+                                To = v,
+                                Value = bags
+                            });
+                        }
+                        else
+                        {
+                            v.Edges.Add(new Edge()
+                            {
+                                To = subV,
+                                Value = bags
+                            });
+                        }
                     }
                 }
             }
